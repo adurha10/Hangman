@@ -113,32 +113,34 @@ document.addEventListener("DOMContentLoaded", function(){
 	}
 
 	function hint(){
-		if (solutionDisplay.indexOf("_") !== -1){
-			console.log(solution);
-			var random = Math.floor(Math.random() * solution.length);
-			console.log(random);
-			console.log(solutionDisplay[random]);
-			 while (solutionDisplay[random] !== "_"){
-			 	random = Math.floor(Math.random() * solution.length)
-			 	console.log(solutionDisplay[random])
-			 }
+		if (lives > 0){
+				if (solutionDisplay.indexOf("_") !== -1){
+					console.log(solution);
+					var random = Math.floor(Math.random() * solution.length);
+					console.log(random);
+					console.log(solutionDisplay[random]);
+					 while (solutionDisplay[random] !== "_"){
+					 	random = Math.floor(Math.random() * solution.length)
+					 	console.log(solutionDisplay[random])
+					 }
 
-			var randomLetter = solution[random];
-			console.log(randomLetter);
+					var randomLetter = solution[random];
+					console.log(randomLetter);
 
-			for (var i = 0; i < solution.length; i++) {
-				console.log("loop: " + i);
-					if (randomLetter === solution[i]){
-						console.log("letter match on index: " + i);
-						solutionDisplay[i] = randomLetter;
-						console.log(solutionDisplay);
-						if (solutionDisplay.indexOf("_") === -1) {
-							document.getElementById("instructions").innerHTML = "Awesome! You only needed a little help. Click 'Start' to try again!";
-						} 
-					} 
-				}
-			updateSolutionDisplay();	
-		}			
+					for (var i = 0; i < solution.length; i++) {
+						console.log("loop: " + i);
+							if (randomLetter === solution[i]){
+								console.log("letter match on index: " + i);
+								solutionDisplay[i] = randomLetter;
+								console.log(solutionDisplay);
+								if (solutionDisplay.indexOf("_") === -1) {
+									document.getElementById("instructions").innerHTML = "Awesome! You only needed a little help. Click 'Start' to try again!";
+								} 
+							} 
+						}
+					updateSolutionDisplay();	
+				}	
+		}	
 	}
 
 	//Function to update button css to "picked" and to update solution display
