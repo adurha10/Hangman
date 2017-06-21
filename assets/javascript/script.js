@@ -53,7 +53,9 @@ document.addEventListener("DOMContentLoaded", function(){
 	startButton.onclick = start;
 	var hintButton = document.getElementById("hint");
 	hintButton.onclick = hint;
-	var letterGrid = ""
+	var letterGrid = "";
+	var started = false;
+	var hintCounter = 0;
 
 
 	//Funtion to reprint lives counter
@@ -99,6 +101,8 @@ document.addEventListener("DOMContentLoaded", function(){
 	}
 
 	function start(){
+		started = true;
+		hintCounter = 0;
 		solution = [];
 		resetLives();
 		updateLives();
@@ -114,33 +118,44 @@ document.addEventListener("DOMContentLoaded", function(){
 
 	function hint(){
 		if (lives > 0){
+			hintCounter++;
+			lives--;
 				if (solutionDisplay.indexOf("_") !== -1){
-					console.log(solution);
 					var random = Math.floor(Math.random() * solution.length);
-					console.log(random);
-					console.log(solutionDisplay[random]);
 					 while (solutionDisplay[random] !== "_"){
-					 	random = Math.floor(Math.random() * solution.length)
-					 	console.log(solutionDisplay[random])
+					 	random = Math.floor(Math.random() * solution.length);
 					 }
 
 					var randomLetter = solution[random];
-					console.log(randomLetter);
-
 					for (var i = 0; i < solution.length; i++) {
-						console.log("loop: " + i);
 							if (randomLetter === solution[i]){
-								console.log("letter match on index: " + i);
 								solutionDisplay[i] = randomLetter;
-								console.log(solutionDisplay);
 								if (solutionDisplay.indexOf("_") === -1) {
-									document.getElementById("instructions").innerHTML = "Awesome! You only needed a little help. Click 'Start' to try again!";
+									updateSolutionDisplay();
+									if (hintCounter < 2){
+										document.getElementById("instructions").innerHTML = "Awesome! You only needed a little help. Click 'Start' to try again!";
+										updateSolutionDisplay();
+										solution.empty();
+									} else if (hintCounter < 4){
+										document.getElementById("instructions").innerHTML = "Not bad, but you used too much help. Click 'Start' to try again!";
+										updateSolutionDisplay();
+										solution.empty();
+									} else if (hintCounter < 10){
+										document.getElementById("instructions").innerHTML = "Terrible! I gave you the answer! Click 'Start' to try again!";
+										updateSolutionDisplay();
+										solution.empty();
+									}
 								} 
 							} 
 						}
-					updateSolutionDisplay();	
 				}	
-		}	
+		} else if (started === false){
+			document.getElementById("instructions").innerHTML = "You have to click start to begin!";
+		}	else {
+			gameOver();
+		}
+		updateSolutionDisplay();
+		updateLives();
 	}
 
 	//Function to update button css to "picked" and to update solution display
@@ -155,24 +170,37 @@ document.addEventListener("DOMContentLoaded", function(){
 					for (var i = 0; i < solution.length; i++) {
 						if (letterClicked === solution[i]){
 							solutionDisplay[i] = letterClicked;
-							if (solutionDisplay.indexOf("_") !== -1) {
-
-							} else {
-								document.getElementById("instructions").innerHTML = "Awesome! Click 'Start' to try again!";
-								solution.empty();
-							}
-						} 
-					}
+							if (solutionDisplay.indexOf("_") === -1) {
+								if (hintCounter === 0){
+										document.getElementById("instructions").innerHTML = "Awesome! You didn't even use help! Click 'Start' to try again!";
+										updateSolutionDisplay();
+										solution.empty();
+									} else if (hintCounter < 2){
+										document.getElementById("instructions").innerHTML = "Awesome! You only needed a little help. Click 'Start' to try again!";
+										updateSolutionDisplay();
+										solution.empty();
+									} else if (hintCounter < 4){
+										document.getElementById("instructions").innerHTML = "Not bad, but you used too much help. Click 'Start' to try again!";
+										updateSolutionDisplay();
+										solution.empty();
+									} else if (hintCounter < 10){
+										document.getElementById("instructions").innerHTML = "Terrible! I gave you the answer! Click 'Start' to try again!";
+										updateSolutionDisplay();
+										solution.empty();
+									} 
+								}
+						}
+					}	 
 				} else {
 					lives--;
 					if (lives === 0){
 						gameOver();
-					}
+					}				
 					updateLives();
 				}
 				updateSolutionDisplay();
 		} else {
-			document.getElementById("instructions").innerHTML = "Out of lives - Click 'Start' to try again!";
+			document.getElementById("instructions").innerHTML = "You have to click start to begin!";
 		}
 	}
 
